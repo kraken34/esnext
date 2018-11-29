@@ -172,3 +172,6 @@ tripService.findByName('Nantes')
         priceService.findPriceByTripId(tripTrouve.id)
             .then(prix => console.log(prix)).catch(err => console.log("TripPrice", err))
     })
+
+
+    
