@@ -93,7 +93,7 @@ console.log(freeTrip.toString())
 
 
 // Redéfinir la méthode toString()
-console.log('Free' + Trip.toString())
+//console.log('Free' + Trip.toString())
 
 
 
@@ -108,13 +108,16 @@ class TripService{
         return new Promise((resolve, reject) => {
             setTimeout( () => {
                 // ici l'exécution du code est asynchrone
-
+                const tripTrouve = Array.from(this.trips)
+                    // Renvoie un élément    
+                    .find((unTrip) => unTrip.name === tripName)
+                    
                 // TODO     => utiliser resolve et reject en fonction du résultat de la recherche
-                
-                if(err) {
-                    reject(err)
+
+                if(tripTrouve) {
+                    resolve(tripTrouve)
                 } else {
-                    resolve(id)
+                    reject(`No trip with name ${tripName}`)
                 }
             }, 2000)
         })
@@ -122,24 +125,57 @@ class TripService{
 }
 
 class PriceService {
-    constructor(identifiant, prix) {
-        this.identifiant = identifiant
-        this.prix = prix
+    constructor() {
+     
         // TODO     => Map of 2 trips
         // 'paris' --> price = 100
         // 'rio-de-janeiro' --> price = 800
         // no price for 'nantes'
-        this.priceService = new Map([['paris', 100], ['rio-de-janeiro', 800]])
-        console.log(priceService)
+        this.prices = new Map([['paris', 100], ['rio-de-janeiro', 800]])
     }
 
     findPriceByTripId(tripId) {
         return new Promise((resolve, reject) => {
             setTimeout( () => {
-                // ici l'exécution du code est asynchrone
-                // TODO     => utiliser resolve et reject en fonction du résultat de la recherche
+                const prixTrouve = this.prices.get(tripId)
+
+                if (prixTrouve) {
+                    resolve(prixTrouve)
+                } else {
+                    reject(`No price found for id ${tripId}`)
+                }
             }, 2000)
         })
     }
 }
 
+
+// On peut modifier mais pas réaffecter propriétés
+const tripService = new TripService()
+
+tripService.findByName('Paris')
+    // ici j'ai une promesse
+    .then(tripTrouve => console.log('Super', tripTrouve))
+    .catch(msgErr => console.log('Oops', msgErr))
+
+
+
+// Trouver un prix par l'id    
+const prices = new PriceService()
+
+prices.findPriceByTripId('paris')
+    .then(prixTrouve => console.log('Super', prixTrouve))
+    .catch(msgErr2 => console.log('Oops', msgErr2))
+
+
+
+const saisie = 'Rio de Janeiro'
+
+tripService.findByName(saisie)
+    .then(tripTrouve => prices.findPriceByTripId(tripTrouve.id) )
+    .then(prixTrouve => console.log('Super', prixTrouve))
+    .catch(msgErr => console.log('Oops', msgErr))
+
+
+//saisie.findByName('Rio de Janeiro').findPriceByTripId('rio-de-janeiro')
+//console.log(saisie)
