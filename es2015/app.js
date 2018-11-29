@@ -120,9 +120,9 @@ class TripService {
                 // ici l'exécution du code est asynchrone
                 let result = [];
 
-                this.set2Trip.forEach(element => { if (element.name == tripName) { result.push(element) } });
+                this.set2Trip.forEach(element => { if (element.name === tripName) { result.push(element) } });
 
-                if (result.length == 0) {
+                if (result.length === 0) {
                     let err = `No trip with name ${tripName}`;
                     reject(err);
                 } else {
@@ -144,7 +144,7 @@ class PriceService {
         // no price for 'nantes'
         this.map2Trip = new Map();
         this.map2Trip.set('paris', 150)
-            .set('rio-de-janeiro', 800);
+                     .set('rio-de-janeiro', 800);
     }
 
     findPriceByTripId(tripId) {
@@ -159,7 +159,7 @@ class PriceService {
                 
                 let result = this.map2Trip.get(tripId);
 
-                if (result == undefined) {
+                if (result === undefined) {
                     let err = `No price found for id ${tripId}`;
                     reject(err);
                 } else {
