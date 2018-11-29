@@ -93,7 +93,7 @@ class PriceService {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if (this.priceMap.has(tripId)) {
-                    resolve(priceMap.get(priceMap))
+                    resolve(this.priceMap.get(tripId))
                 } else {
                     reject(`No price found for id ${tripId}`);
                 }
@@ -107,4 +107,12 @@ let priceService = new PriceService()
 tripService.findByName("Paris").then(res => console.log(res)).catch(error => console.log(error))
 tripService.findByName("Toulouse").then(res => console.log(res)).catch(error => console.log(error))
 
-tripService.findByName("Rio de Janeiro").then(priceService.findPriceByTripId(res => console.log(res)).catch(error => console.log(error))).catch(error => console.log(error))
+tripService.findByName("Rio de Janeiro")
+    .then(t => priceService.findPriceByTripId(t.id))
+    .then(res => console.log(res))
+    .catch(error => console.log(error))
+
+tripService.findByName("Nantes")
+    .then(t => priceService.findPriceByTripId(t.id))
+    .then(res => console.log(res))
+    .catch(error => console.log(error))
