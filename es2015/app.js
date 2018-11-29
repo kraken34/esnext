@@ -107,6 +107,7 @@ class TripService {
         this.set2Trip = new Set();
         this.set2Trip
             .add(new Trip('paris', 'Paris', 'img/paris.jpg'))
+            .add(new Trip('paris2', 'Paris', 'img/paris2.jpg'))
             .add(new Trip('nantes', 'Nantes', 'img/nantes.jpg'))
             .add(new Trip('rio-de-janeiro', 'Rio de Janeiro', 'img/rio-de-janeiro.jpg'));
 
@@ -144,6 +145,7 @@ class PriceService {
         // no price for 'nantes'
         this.map2Trip = new Map();
         this.map2Trip.set('paris', 150)
+                     .set('paris2', 200)
                      .set('rio-de-janeiro', 800);
     }
 
@@ -189,10 +191,13 @@ rechercheTripParNom("Paris");
 rechercheTripParNom("Montpellier");
 
 function recherchePrixParNom(name){
-
+           
     tripService.findByName(name)
-               .then(result=>result.forEach(element=> priceService.findPriceByTripId(element.id)
-                                                                  .then(result=>lg(`Price found : ${result} for ${name}`))))
+               .then(tabTrips=>Promise.all(tabTrips.map(trip=> priceService.findPriceByTripId(trip.id))))
+               .then(tabPrix => tabPrix.map(p1 => `${p1}`))
+               .then(tabPrixString => {lg(`Price found for ${name} :`);
+                                       lg(tabPrixString.reduce((p1,p2) => p1+"€, "+p2+"€"));
+                                       })
                .catch(err => lg(err));
 }
 
