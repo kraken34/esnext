@@ -101,8 +101,8 @@ class TripService {
         return new Promise((resolve, reject) => {
 
             setTimeout( () => {
-                let tripsTab = [];
-                this.trips.forEach(t => tripsTab.push(t))
+                let tripsTab = Array.from(this.trips);
+                //this.trips.forEach(t => tripsTab.push(t))
                  
                 if(tripsTab.some(t => t.name == tripName)) {
                     resolve(tripsTab.find(t => t.name == tripName)); // en cas de succès
@@ -140,24 +140,22 @@ class PriceService {
 }
 
 let tripService = new TripService();
-tripService.findByName("Paris").then(t => {
-    console.log(t.toString());
-});
+tripService.findByName("Paris")
+    .then(t => {console.log(t.toString());});
 
-tripService.findByName("Toulouse").then(t => {
-    console.log(t.toString());
-});
+tripService.findByName("Toulouse")
+    .then(t => {console.log(t.toString());})
+    .catch(msgErr=>console.log(`No Match ! (${msgErr})`));
 
 let priceService = new PriceService();
-tripService.findByName("Rio de Janeiro").then(t => {
-    priceService.findPriceByTripId(t.id).then(price => {
-        console.log(`Price ${price} found for ${t.id}`);
-    });
+tripService.findByName("Rio de Janeiro")
+    .then(t => {priceService.findPriceByTripId(t.id)
+    .then(price => {console.log(`Price ${price} found for ${t.id}`);});
 });
 
 tripService.findByName("Nantes").then(t => {
-    priceService.findPriceByTripId(t.id).then(price => {
-        console.log(`Price ${price} found for ${t.id}`);
-    });
+    priceService.findPriceByTripId(t.id)
+    .then(price => {console.log(`Price ${price} found for ${t.id}`);})
+    .catch(msgErr=>console.log(`No Match ! (${msgErr})`));
 });
 
